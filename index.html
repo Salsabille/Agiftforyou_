@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Agiftforyou</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@300;400;500;600&family=Caveat:wght@500;600&display=swap">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header id="main-header">
+      <h1>A gift for you</h1>
+      <p class="lead">Une petite attention à personnaliser. Écrivez, dessinez, brodez et composez.</p>
+    </header>
+
+    <section id="create" class="panel">
+      <div class="names">
+        <label for="to">Pour <input type="text" id="to" maxlength="40" placeholder="son prénom"></label>
+        <label for="from">De <input type="text" id="from" maxlength="40" placeholder="toi"></label>
+      </div>
+
+      <div class="settings-row">
+        <label>
+          <span>Couleur de l'enveloppe</span>
+          <div class="color-picker" id="envColors"></div>
+        </label>
+        <label>
+          <span>Ouvrir après le (Optionnel)</span>
+          <input type="datetime-local" id="unlockDate">
+        </label>
+      </div>
+
+      <div class="tabs" role="tablist" id="tabs" style="margin-top:16px;"></div>
+
+      <!-- LETTRE -->
+      <div class="panel" id="p-letter" role="tabpanel">
+        <textarea class="letter" id="letter" maxlength="1200" placeholder="Écris ton message ici..."></textarea>
+      </div>
+
+      <!-- STICKER -->
+      <div class="panel" id="p-sticker" role="tabpanel" hidden>
+        <div class="sticker-container">
+          <canvas class="draw" id="draw" width="240" height="240"></canvas>
+        </div>
+        <div class="tools-row">
+          <span>Couleur</span>
+          <div class="color-picker" id="inks"></div>
+          <span style="margin-left:20px;">Trait</span>
+          <div class="nib-picker">
+            <button class="nib" data-w="3" aria-pressed="false"><i style="width:4px;height:4px;"></i></button>
+            <button class="nib" data-w="8" aria-pressed="true"><i style="width:10px;height:10px;"></i></button>
+            <button class="nib" data-w="16" aria-pressed="false"><i style="width:18px;height:18px;"></i></button>
+          </div>
+          <button class="btn-text" id="undo" style="margin-left:20px;">annuler</button>
+        </div>
+      </div>
+
+      <!-- BRODERIE -->
+      <div class="panel" id="p-stitch" role="tabpanel" hidden>
+        <p style="font-family:var(--display); font-size:1.2rem; color:var(--text-muted);">Brodez un point sur chaque case</p>
+        <div class="grid-container">
+          <div class="grid stitch" id="stitch"></div>
+        </div>
+        <div class="tools-row" style="margin-top:24px;">
+          <div class="color-picker" id="threads"></div>
+          <button class="btn-text" id="stClear" style="margin-left:20px;">effacer</button>
+        </div>
+        <div class="pattern-row">
+          <button class="pattern-btn active" data-pat="flower">fleur</button>
+          <button class="pattern-btn" data-pat="bow">nœud</button>
+          <button class="pattern-btn" data-pat="star">étoile</button>
+          <button class="pattern-btn" data-pat="free">style libre</button>
+        </div>
+      </div>
+
+      <!-- MÉLODIE -->
+      <div class="panel" id="p-tune" role="tabpanel" hidden>
+        <h2>La mélodie</h2>
+        <div class="grid seq" id="seq"></div>
+        <div class="tune-controls">
+          <button class="btn-play-pink" id="play" type="button">Écouter</button>
+          <label style="color:var(--ink); font-size:0.9rem;">Tempo <input type="range" id="bpm" class="slider-blue" min="70" max="160" value="100"></label>
+          <button class="btn-clear-dark" id="seqClear" type="button">Vider</button>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-next" id="next" type="button">Suivant →</button>
+      </div>
+    </section>
+
+    <!-- ÉCRAN DE SCELLEMENT -->
+    <section id="seal" class="panel" hidden>
+      <div class="envelope-wrapper" id="sealed-env" style="cursor:default;">
+        <div class="env-back"></div>
+        <div class="env-card" style="transform:translateY(0);"></div>
+        <div class="env-front-left"></div>
+        <div class="env-front-right"></div>
+        <div class="env-front-bottom"></div>
+        <div class="env-flap"></div>
+      </div>
+
+      <input type="text" id="hidden-link" readonly>
+      <div class="action-row" style="flex-direction:column; align-items:center; gap:8px;">
+        <button class="btn primary" id="copy" type="button" style="border-radius:999px; padding:12px 32px; background:var(--accent); color:white; border:none; font-size:1.1rem; cursor:pointer;">Copier le lien</button>
+        <button class="btn-text" id="edit" style="margin-top:16px; text-transform:none;">← Retour à l'édition</button>
+      </div>
+      <p class="toast" id="toast" role="status"></p>
+    </section>
+
+    <!-- ENVELOPPE D'ATTENTE (RÉCEPTION) -->
+    <section id="envelope-screen" hidden>
+      <div class="envelope-wrapper" id="the-envelope">
+        <div class="env-back"></div>
+        <div class="env-card"></div>
+        <div class="env-front-left"></div>
+        <div class="env-front-right"></div>
+        <div class="env-front-bottom"></div>
+        <div class="env-flap"></div>
+        <div class="env-seal" style="background:currentColor; border-radius:50%; width:40px; height:40px; position:absolute; top:100px; left:50%; transform:translateX(-50%); z-index:6; color:white; display:grid; place-items:center;">❤</div>
+      </div>
+    </section>
+
+    <!-- CARTE FINALE -->
+    <section id="view" hidden></section>
+  </main>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
