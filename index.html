@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  
+  <title>Agiftforyou</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600&family=Caveat:wght@500;600&display=swap">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Capsule affective</p>
+      <h1>Une petite capsule pour quelqu'un que tu aimes</h1>
+      <p class="lead" style="margin-top:12px">Écris une lettre, dessine un sticker, brode un motif, compose une mélodie. Ferme la capsule et envoie le code à la personne. Elle l'ouvre ici, avec le son.</p>
+    </header>
+
+    <div class="modes">
+      <button class="btn primary" id="mCreate" type="button">Composer une capsule</button>
+      <button class="btn" id="mOpen" type="button">J'ai reçu un code</button>
+      <button class="btn" id="mDemo" type="button">Voir un exemple</button>
+    </div>
+
+    <section id="create" style="display:flex;flex-direction:column;gap:20px">
+      <div class="names">
+        <label class="f" for="to">Pour<input type="text" id="to" maxlength="40" placeholder="Camille"></label>
+        <label class="f" for="from">De la part de<input type="text" id="from" maxlength="40" placeholder="Ton prénom"></label>
+      </div>
+      <div class="tabs" role="tablist" id="tabs"></div>
+
+      <div class="panel" id="p-letter" role="tabpanel">
+        <h2>La lettre</h2>
+        <textarea class="letter" id="letter" maxlength="1200" aria-label="Lettre" placeholder="Écris comme tu parles. Quelques lignes suffisent."></textarea>
+        <p class="hint"><span id="count">0</span> / 1200 caractères</p>
+      </div>
+
+      <div class="panel" id="p-sticker" role="tabpanel" hidden>
+        <h2>Le sticker</h2>
+        <canvas class="draw" id="draw" width="240" height="240" aria-label="Zone de dessin"></canvas>
+        <div class="row" id="inks"></div>
+        <div class="row">
+          <label class="f" for="size" style="flex-direction:row;align-items:center;gap:8px">Trait <input type="range" id="size" min="2" max="18" value="6"></label>
+          <button class="btn small" id="undo" type="button">Annuler</button>
+          <button class="btn small" id="clear" type="button">Effacer</button>
+        </div>
+        <p class="hint">Dessine au doigt ou à la souris. Le fond reste transparent.</p>
+      </div>
+
+      <div class="panel" id="p-stitch" role="tabpanel" hidden>
+        <h2>La broderie</h2>
+        <div class="grid stitch" id="stitch" aria-label="Grille de point de croix 12 par 12"></div>
+        <div class="row" id="threads"></div>
+        <div class="row"><button class="btn small" id="stClear" type="button">Tout effacer</button><button class="btn small" id="stHeart" type="button">Partir d'un cœur</button></div>
+        <p class="hint">Un point de croix par case. Glisse pour colorier, touche une case colorée avec le fil gomme pour l'enlever.</p>
+      </div>
+
+      <div class="panel" id="p-tune" role="tabpanel" hidden>
+        <h2>La mélodie</h2>
+        <div class="grid seq" id="seq" aria-label="Séquenceur 8 pas, 6 notes"></div>
+        <div class="row">
+          <button class="btn small primary" id="play" type="button">Écouter</button>
+          <label class="f" for="bpm" style="flex-direction:row;align-items:center;gap:8px">Tempo <input type="range" id="bpm" min="70" max="160" value="100"></label>
+          <button class="btn small" id="seqClear" type="button">Vider</button>
+        </div>
+        <p class="hint">Les notes sont une gamme pentatonique : tout ce que tu poses sonne juste.</p>
+      </div>
+
+      <div class="row">
+        <button class="btn" id="prev" type="button">Retour</button>
+        <button class="btn primary" id="next" type="button">Suivant</button>
+      </div>
+    </section>
+
+    <section id="seal" class="seal" hidden>
+      <h2>Ta capsule est prête</h2>
+      <div id="preview"></div>
+      <p class="hint">Copie ce code et envoie-le par message. La personne le colle dans « J'ai reçu un code ». Le code contient tout le contenu, rien n'est stocké ailleurs.</p>
+      <div class="out" id="code" tabindex="0" aria-label="Code de la capsule"></div>
+      <div class="row">
+        <button class="btn primary" id="copy" type="button">Copier le code</button>
+        <button class="btn" id="edit" type="button">Modifier</button>
+      </div>
+      <p class="toast" id="toast" role="status"></p>
+    </section>
+
+    <section id="open" hidden style="display:none;flex-direction:column;gap:14px">
+      <h2>Ouvrir une capsule</h2>
+      <label class="f" for="paste">Colle le code reçu
+        <textarea id="paste" rows="4" placeholder="C1.H4sI…"></textarea></label>
+      <div class="row"><button class="btn primary" id="unseal" type="button">Ouvrir</button></div>
+      <p class="toast" id="openErr" role="status" style="color:var(--accent)"></p>
+    </section>
+
+    <section id="view" hidden></section>
+  </main>
+  
+  <!-- JavaScript (le mot-clé pour inclure le js) -->
+  <script src="script.js"></script>
+</body>
+</html>
